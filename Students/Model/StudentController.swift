@@ -8,6 +8,19 @@
 
 import Foundation
 
+enum TrackType: Int {
+    case none
+    case iOS
+    case Web
+    case UX
+}
+
+enum SortOptions: Int {
+    case firstName
+    case lastName
+}
+
+
 class StudentController {
     
     
@@ -53,4 +66,32 @@ class StudentController {
          }
         
     }
+    
+    func filter(with trackType: TrackType, sortedBy sorter: SortOptions, completion: @escaping ([Student]) -> Void ) {
+        
+        var updatedStudents: [Student]
+        
+        switch trackType {
+        case .iOS:
+            updatedStudents = students.filter { $0.course == "iOS" }
+        case .Web:
+            updatedStudents = students.filter { $0.course == "Web" }
+        case .UX:
+            updatedStudents = students.filter { $0.course == "UX" }
+        default:
+            //filter for none or anthing except cases above.
+            updatedStudents = students
+        }
+        
+        // if first element is less than second so A-Z order
+        if sorter == .firstName {
+            updatedStudents = updatedStudents.sorted {$0.firstName < $1.firstName }
+        } else {
+            
+            updatedStudents = updatedStudents.sorted {$0.lastName < $1.lastName }
+        }
+        // let the ui know we are done by calling completion.
+        completion(updatedStudents)
+    }
+    
 }
