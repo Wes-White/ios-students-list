@@ -35,7 +35,7 @@ class StudentsViewController: UIViewController {
                 NSLog("Error Loading Students: \(error)")
                 return
             }
-            // take the array of students and assign them to our filteredAndSortedStudents array. Using DispatchQueue main because we have to bring this back to the main queue in order to show it via the uI. 
+            // take the array of students and assign them to our filteredAndSortedStudents array. Using DispatchQueue main because we have to bring this back to the main queue in order to show it via the uI.
             DispatchQueue.main.async {
                 if let students = students {
                     self.filteredAndSortedStudents = students
@@ -66,10 +66,10 @@ extension StudentsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "StudentCell", for: indexPath)
-        
+        let student = filteredAndSortedStudents[indexPath.row]
         // Configure cell
-        cell.textLabel?.text = "wes"
-        cell.detailTextLabel?.text = "iOS"
+        cell.textLabel?.text = student.name
+        cell.detailTextLabel?.text = student.course
         
         return cell
     }
