@@ -17,11 +17,31 @@ class StudentsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     // MARK: - Properties
-
+    private let studentController = StudentController()
+    private var filteredAndSortedStudents: [Student] = [] {
+        //property observere. So everytime this code changes run this code inside the didSet
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.dataSource = self
+        studentController.loadFromPersistentStore { (students, error) in
+            if let error = error {
+                NSLog("Error Loading Students: \(error)")
+                return
+            }
+            // take the array of students and assign them to our filteredAndSortedStudents array. Using DispatchQueue main because we have to bring this back to the main queue in order to show it via the uI. 
+            DispatchQueue.main.async {
+                if let students = students {
+                    self.filteredAndSortedStudents = students
+                }
+            }
+         }
     }
     
     // MARK: - Action Handlers
@@ -41,13 +61,15 @@ class StudentsViewController: UIViewController {
 
 extension StudentsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return filteredAndSortedStudents.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "StudentCell", for: indexPath)
         
         // Configure cell
+        cell.textLabel?.text = "wes"
+        cell.detailTextLabel?.text = "iOS"
         
         return cell
     }
